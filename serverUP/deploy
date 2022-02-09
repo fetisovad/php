@@ -1,0 +1,53 @@
+#!/bin/bash
+
+function RUN_DOCKER() {
+    docker-compose up -d
+    source ./scripts/fix_permissions.sh
+
+    echo "####################################"
+    echo " ─=≡Σ((( つ◕ل͜◕)つ RUN DOCKER! RUN! "
+    echo "####################################"
+}
+
+function KILL() {
+    docker rm -f $(docker ps -aq)
+}
+
+function DOWN() {
+    docker-compose down
+}
+
+## START
+if [[ ${1} = 's' ]]; then
+    RUN_DOCKER
+fi
+
+## BUILD
+if [[ ${1} = 'b' ]]; then
+    echo '########################################'
+    echo ' ┬┴┬┴┤(･_├┬┴┬┴ Build Docker Container...'
+    echo '########################################'
+    docker-compose build
+
+    source ./add_hosts
+
+    RUN_DOCKER
+fi
+
+## KILL
+if [[ ${1} = 'k' ]]; then
+    echo '########################################'
+    echo ' (ノಠ益ಠ)ノ彡┻━┻ I KILL YOU DOCKER!'
+    echo '########################################'
+
+    KILL
+fi
+
+## DOWN
+if [[ ${1} = 'd' ]]; then
+    echo '########################################'
+    echo ' (-, - )…zzzZZZ Sleeping...'
+    echo '########################################'
+
+    DOWN
+fi
